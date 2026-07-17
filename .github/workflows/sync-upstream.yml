@@ -9,13 +9,16 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Sync upstream changes
-        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
-        with:
-          upstream_repository: ZhuLinsen/daily_stock_analysis
-          upstream_branch: main
-          target_branch: main
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/ZhuLinsen/daily_stock_analysis.git
+      - name: Fetch upstream changes
+        run: git fetch upstream
+      - name: Merge upstream/main into main
+        run: git merge upstream/main --no-edit
+      - name: Push merged changes
+        run: git push origin main
