@@ -60,18 +60,18 @@ jobs:
       # ★★★ 新增：AlphaSift 全市场选股 ★★★
       # ============================================================
       - name: 运行 AlphaSift 全市场扫描
-        env:
-          ALPHASIFT_ENABLED: ${{ secrets.ALPHASIFT_ENABLED }}
-        run: |
-          if [ "${ALPHASIFT_ENABLED}" = "true" ]; then
-            echo "🔍 AlphaSift 全市场扫描已启用..."
-            pip install -e git+https://github.com/ZhuLinsen/alphasift.git@main#egg=alphasift
-            alphasift screen dual_low --no-llm --output candidates.json
-            echo "✅ AlphaSift 扫描完成，候选股已保存"
-            cat candidates.json
-          else
-            echo "⚪ AlphaSift 未启用，跳过全市场扫描"
-          fi
+         env:
+    ALPHASIFT_ENABLED: ${{ secrets.ALPHASIFT_ENABLED }}
+  run: |
+    if [ "${ALPHASIFT_ENABLED}" = "true" ]; then
+      echo "🔍 AlphaSift 全市场扫描已启用..."
+      pip install -e git+https://github.com/ZhuLinsen/alphasift.git@main#egg=alphasift
+      alphasift screen dual_low --no-llm --market us --output candidates.json
+      echo "✅ AlphaSift 扫描完成，候选股已保存"
+      cat candidates.json
+    else
+      echo "⚪ AlphaSift 未启用，跳过全市场扫描"
+    fi
       
       - name: 执行股票分析
         env:
